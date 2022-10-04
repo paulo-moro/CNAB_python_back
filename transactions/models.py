@@ -13,7 +13,11 @@ class Transaction(models.Model):
     card = models.IntegerField()
     shop_rep = models.CharField(max_length=14)
     shop_name = models.CharField(max_length=19)
-
+    type = models.ForeignKey(
+        "transactions.Type",
+        on_delete=models.CASCADE,
+        related_name="transactions",
+    )
 
 class NatureChoices(models.TextChoices):
     """Nature type Choices"""
@@ -35,11 +39,4 @@ class Type(models.Model):
     description = models.CharField(max_length=30)
     nature = models.CharField(max_length=30, choices=NatureChoices.choices)
     signal = models.CharField(max_length=1, choices=SignalChoices.choices)
-    transaction = models.ForeignKey(
-        "transactions.Transaction",
-        on_delete=models.CASCADE,
-        related_name="transactions",
-    )
-    transaction = models.OneToOneField(
-        "transactions.Transaction", on_delete=models.CASCADE
-    )
+    
