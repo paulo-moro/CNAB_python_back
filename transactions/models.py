@@ -1,6 +1,12 @@
+from enum import unique
+from django.conf import settings
 from django.db import models
 
+import os
+
 # Create your models here.
+
+from django.core.exceptions import ValidationError
 
 
 class Transaction(models.Model):
@@ -10,7 +16,7 @@ class Transaction(models.Model):
     transaction_time = models.TimeField()
     amount = models.FloatField()
     CPF = models.IntegerField()
-    card = models.IntegerField()
+    card = models.CharField(max_length=12)
     shop_rep = models.CharField(max_length=14)
     shop_name = models.CharField(max_length=19)
     type = models.ForeignKey(
@@ -18,6 +24,7 @@ class Transaction(models.Model):
         on_delete=models.CASCADE,
         related_name="transactions",
     )
+
 
 class NatureChoices(models.TextChoices):
     """Nature type Choices"""
@@ -39,4 +46,23 @@ class Type(models.Model):
     description = models.CharField(max_length=30)
     nature = models.CharField(max_length=30, choices=NatureChoices.choices)
     signal = models.CharField(max_length=1, choices=SignalChoices.choices)
-    
+
+
+MB = 2
+MAX_SIZE = MB * 1024 * 1024
+
+
+def validate_file_size(file):
+    """Validation file size function, take a file as argument"""
+
+    dir(file)
+    if file.size > MAX_SIZE:
+        raise ValidationError(f"File exceed maximum size {MB}mb")
+
+
+class CNABFile(models.Model):
+    """Model for CNAB file"""
+
+    title = models.CharField(max_length=50, unique=True)
+    file = models.FileField(validators=[validate_file_size])
+    # user= models.ForeignKey("User.User", on_delete=models.CASCADE, related_name="files")
