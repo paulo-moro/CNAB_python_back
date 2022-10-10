@@ -65,4 +65,3 @@ class CNABFile(models.Model):
 
     title = models.CharField(max_length=50, unique=True)
     file = models.FileField(validators=[validate_file_size])
-    # user= models.ForeignKey("User.User", on_delete=models.CASCADE, related_name="files")

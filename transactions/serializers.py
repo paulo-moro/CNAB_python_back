@@ -3,8 +3,20 @@ from rest_framework import serializers
 from transactions import models
 
 
+class TypeSerializer(serializers.ModelSerializer):
+    """Type serializer"""
+
+    class Meta:
+        """Meta class for type serializer"""
+
+        model = models.Type
+        fields = "__all__"
+
+
 class TransactionDetailSerializer(serializers.ModelSerializer):
     """Transaction Detail serializer"""
+
+    type = TypeSerializer(read_only=True)
 
     class Meta:
         """Meta Class of Transaction Detail Serializer"""
@@ -31,14 +43,4 @@ class CNABFIleSerializer(serializers.ModelSerializer):
         """Meta Class of CNABFile  Serializer"""
 
         model = models.CNABFile
-        fields = "__all__"
-
-
-class TypeSerializer(serializers.ModelSerializer):
-    """Type serializer"""
-
-    class Meta:
-        """Meta class for type serializer"""
-
-        model = models.Type
         fields = "__all__"

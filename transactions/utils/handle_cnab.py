@@ -1,5 +1,10 @@
 from datetime import date, time, datetime
 
+from django.shortcuts import get_object_or_404
+
+from transactions.models import Type
+from transactions.serializers import TypeSerializer
+
 
 def read_cnab(filepath):
     """Function that take a CNAB File and convert into a list"""
@@ -27,7 +32,12 @@ def transaction_transcription(cnab_reading, perform_create, serializer):
     }
 
     for transaction in cnab_reading:
-        request["type"] = transaction[0]
+        transaction_type = get_object_or_404(Type, id=transaction[0])
+
+        import ipdb
+
+        ipdb.set_trace()
+        request["type"] = transaction_type
 
         formated_date = date(
             int(transaction[1:5]), int(transaction[5:7]), int(transaction[7:9])
@@ -40,6 +50,7 @@ def transaction_transcription(cnab_reading, perform_create, serializer):
             int(transaction[44:46]),
             int(transaction[46:48]),
         )
+
         request["transaction_date"] = formated_date
         request["amount"] = transaction[9:19]
         request["CPF"] = transaction[19:30]
@@ -51,9 +62,10 @@ def transaction_transcription(cnab_reading, perform_create, serializer):
         request["transaction_time"] = formated_time
         request["shop_rep"] = transaction[48:62]
         request["shop_name"] = transaction[62:82]
-        serializer = serializer(data=request)
-        serializer.is_valid(raise_exception=True)
-        perform_create(serializer)
-        response_list.append(serializer.data)
+        transaciton_serializer = serializer(data=request)
+
+        transaciton_serializer.is_valid(raise_exception=True)
+        perform_create(transaciton_serializer)
+        response_list.append(transaciton_serializer.data)
 
     return response_list

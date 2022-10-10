@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from transactions.serializers import (
     CNABFIleSerializer,
+    TransactionDetailSerializer,
     TransactionSerializer,
     TypeSerializer,
 )
@@ -37,7 +38,7 @@ class RetrieveDeleteCNABFile(generics.RetrieveDestroyAPIView):
 class CreateTransactionView(generics.CreateAPIView):
     """Create Transaction view"""
 
-    serializer_class = TransactionSerializer
+    serializer_class = TransactionDetailSerializer
 
     def create(self, request, *args, **kwargs):
         stored_file = CNABFile.objects.get(id=kwargs["cnab_id"])
@@ -54,6 +55,8 @@ class CreateTransactionView(generics.CreateAPIView):
             response_list,
             status=status.HTTP_201_CREATED,
         )
+    
+    
 
 
 class CreateListTypeView(generics.ListCreateAPIView):

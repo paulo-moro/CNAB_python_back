@@ -17,6 +17,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+
+
 class UserSerializer(serializers.ModelSerializer):
     """User  serializer"""
 
@@ -25,3 +27,9 @@ class UserSerializer(serializers.ModelSerializer):
 
         model = User
         fields = "__all__"
+
+        
+    def create(self, validated_data: dict) -> User:
+        user = User.objects.create_user(**validated_data)
+
+        return user
