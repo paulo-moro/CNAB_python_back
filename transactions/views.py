@@ -19,6 +19,7 @@ from transactions.utils.handle_cnab import (
     read_cnab,
     transaction_transcription,
 )
+from utils.mixins import SerializerByMethodMixin
 
 
 class CreateUploadTransaction(generics.CreateAPIView):
@@ -41,6 +42,18 @@ class RetrieveDeleteCNABFile(generics.RetrieveDestroyAPIView):
     lookup_url_kwarg = "cnab_id"
 
 
+class TransactionFilter(filters.FilterSet):
+    """Transaction filters"""
+
+    shop_name = filters.CharFilter(field_name="shop_name", lookup_expr="icontains")
+
+    class Meta:
+        """Transaction Meta Filters"""
+
+        model = Transaction
+        fields = "__all__"
+
+
 class CreateListTransactionView(generics.ListCreateAPIView):
     """Create List Transaction view"""
 
@@ -49,7 +62,9 @@ class CreateListTransactionView(generics.ListCreateAPIView):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ('shop_name')
+    filterset_class = TransactionFilter
+
+    
 
     def create(self, request, *args, **kwargs):
 
