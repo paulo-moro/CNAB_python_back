@@ -47,7 +47,7 @@ def transaction_transcription(cnab_reading, serializer, user):
         )
 
         request["transaction_date"] = formated_date
-        request["amount"] = transaction[9:19]
+        request["amount"] = round(int(transaction[9:19]) / 100, 2)
         request["CPF"] = transaction[19:30]
         request["card"] = transaction[30:42]
         formated_time = time(

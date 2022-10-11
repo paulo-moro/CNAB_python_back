@@ -23,14 +23,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
-            "last_login",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
             "is_superuser",
             "is_active",
             "date_joined",
-            "first_name",
-            "last_name",
-            "username",
-            "email",
         ]
         extra_kwargs = {"password": {"write_only": True}}
 

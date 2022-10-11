@@ -14,7 +14,7 @@ class Transaction(models.Model):
 
     transaction_date = models.DateField()
     transaction_time = models.TimeField()
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     CPF = models.IntegerField()
     card = models.CharField(max_length=12)
     shop_rep = models.CharField(max_length=14)

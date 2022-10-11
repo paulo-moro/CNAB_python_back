@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 from User.serializer import UserSerializer
 
@@ -29,7 +30,6 @@ class TransactionDetailSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     """Transaction Serializer"""
-
     class Meta:
         """Meta Class for Transaction Serializer"""
 
@@ -45,3 +45,12 @@ class CNABFIleSerializer(serializers.ModelSerializer):
 
         model = models.CNABFile
         fields = "__all__"
+
+
+class ListTransactionSerializer(serializers.Serializer):
+    '''List Transaction Serializer'''
+    transactions = TransactionSerializer(many=True, read_only=True )
+    subtotal = serializers.SerializerMethodField()
+
+
+ 
