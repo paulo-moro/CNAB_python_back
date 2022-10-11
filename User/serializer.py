@@ -1,13 +1,10 @@
 from rest_framework import serializers
 
 from User.models import User
-from transactions.serializers import TransactionDetailSerializer
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """User Detail serializer"""
-
-    transactions = TransactionDetailSerializer(many=True)
 
     class Meta:
         """Meta Class of User Detail Serializer"""
@@ -17,8 +14,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
         depth = 1
 
 
-
-
 class UserSerializer(serializers.ModelSerializer):
     """User  serializer"""
 
@@ -26,9 +21,19 @@ class UserSerializer(serializers.ModelSerializer):
         """Meta Class of User  Serializer"""
 
         model = User
-        fields = "__all__"
+        fields = [
+            "id",
+            "last_login",
+            "is_superuser",
+            "is_active",
+            "date_joined",
+            "first_name",
+            "last_name",
+            "username",
+            "email",
+        ]
+        extra_kwargs = {"password": {"write_only": True}}
 
-        
     def create(self, validated_data: dict) -> User:
         user = User.objects.create_user(**validated_data)
 
