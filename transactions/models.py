@@ -24,6 +24,9 @@ class Transaction(models.Model):
         on_delete=models.CASCADE,
         related_name="transactions",
     )
+    user = models.ForeignKey(
+        "User.User", on_delete=models.CASCADE, related_name="transactions"
+    )
 
 
 class NatureChoices(models.TextChoices):

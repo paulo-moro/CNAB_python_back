@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from User.serializer import UserSerializer
 
 from transactions import models
 
@@ -16,7 +17,7 @@ class TypeSerializer(serializers.ModelSerializer):
 class TransactionDetailSerializer(serializers.ModelSerializer):
     """Transaction Detail serializer"""
 
-    type = TypeSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         """Meta Class of Transaction Detail Serializer"""

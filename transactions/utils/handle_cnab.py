@@ -1,9 +1,7 @@
 from datetime import date, time, datetime
+import os
 
-from django.shortcuts import get_object_or_404
-
-from transactions.models import Type
-from transactions.serializers import TypeSerializer
+from transactions.models import CNABFile
 
 
 def read_cnab(filepath):
@@ -17,7 +15,7 @@ def read_cnab(filepath):
         return []
 
 
-def transaction_transcription(cnab_reading, perform_create, serializer):
+def transaction_transcription(cnab_reading, serializer, user):
     """Function that transcript the cnab file to a transaction and return a list"""
     response_list = []
     request = {
@@ -32,11 +30,8 @@ def transaction_transcription(cnab_reading, perform_create, serializer):
     }
 
     for transaction in cnab_reading:
-        transaction_type = get_object_or_404(Type, id=transaction[0])
+        transaction_type = transaction[0]
 
-        import ipdb
-
-        ipdb.set_trace()
         request["type"] = transaction_type
 
         formated_date = date(
@@ -62,10 +57,19 @@ def transaction_transcription(cnab_reading, perform_create, serializer):
         request["transaction_time"] = formated_time
         request["shop_rep"] = transaction[48:62]
         request["shop_name"] = transaction[62:82]
-        transaciton_serializer = serializer(data=request)
+        request["user"] = user.id
 
-        transaciton_serializer.is_valid(raise_exception=True)
-        perform_create(transaciton_serializer)
-        response_list.append(transaciton_serializer.data)
+        transaction_serializer = serializer(data=request)
+
+        transaction_serializer.is_valid(raise_exception=True)
+        transaction_serializer.save()
+        response_list.append(transaction_serializer.data)
 
     return response_list
+
+
+def delete_cnab(filepath, cnab_id):
+    """Function that delete cnab file from database"""
+    cnab_delete = CNABFile.objects.get(id=cnab_id)
+    cnab_delete.delete()
+    os.remove(filepath)
