@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "rest_framework.authtoken",
+    "django_filters",
     "transactions",
     "User",
 ]
@@ -132,3 +134,7 @@ AUTH_USER_MODEL = "User.User"
 MEDIA_URL = "/api/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads/")
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+}

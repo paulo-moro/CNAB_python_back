@@ -1,9 +1,12 @@
-# Create your views here.
-from django.shortcuts import get_list_or_404, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django_filters import rest_framework as filters
 from rest_framework import generics, status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from datetime import date, time, datetime
+from rest_framework.views import APIView
 from User.permissions import IsAdminOrOwner
+
 from transactions.models import CNABFile, Transaction, Type
 from transactions.serializers import (
     CNABFIleSerializer,
@@ -16,14 +19,6 @@ from transactions.utils.handle_cnab import (
     read_cnab,
     transaction_transcription,
 )
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import (
-    IsAdminUser,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
-
-# from transactions.models import Transaction
 
 
 class CreateUploadTransaction(generics.CreateAPIView):
@@ -46,12 +41,15 @@ class RetrieveDeleteCNABFile(generics.RetrieveDestroyAPIView):
     lookup_url_kwarg = "cnab_id"
 
 
-class CreateTransactionView(generics.CreateAPIView):
-    """Create Transaction view"""
+class CreateListTransactionView(generics.ListCreateAPIView):
+    """Create List Transaction view"""
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly | IsAdminOrOwner]
     serializer_class = TransactionSerializer
+    queryset = Transaction.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_fields = ('shop_name')
 
     def create(self, request, *args, **kwargs):
 
@@ -73,13 +71,12 @@ class CreateTransactionView(generics.CreateAPIView):
         )
 
 
-class ListTransactionView(generics.ListAPIView):
-    queryset = Transaction.objects.all()
-
-    serializer_class = TransactionSerializer
-
-
 class RetrieveUpdateDeleteTransactionView(generics.RetrieveUpdateDestroyAPIView):
+    """Retruve Update Delete transaction view"""
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated | IsAdminOrOwner]
+
     queryset = Transaction.objects.all()
     serializer_class = TransactionDetailSerializer
     lookup_url_kwarg = "transaction_id"
