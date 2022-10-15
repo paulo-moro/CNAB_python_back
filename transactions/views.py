@@ -2,7 +2,11 @@ from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from rest_framework import generics, status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    IsAdminUser,
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from User.permissions import IsAdminOrOwner
@@ -54,17 +58,23 @@ class TransactionFilter(filters.FilterSet):
         fields = "__all__"
 
 
-class CreateListTransactionView(generics.ListCreateAPIView):
+class CreateListTransactionView(SerializerByMethodMixin, generics.ListCreateAPIView):
     """Create List Transaction view"""
 
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly | IsAdminOrOwner]
-    serializer_class = TransactionSerializer
+
+    serializer_map = {"GET": TransactionDetailSerializer, "POST": TransactionSerializer}
     queryset = Transaction.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = TransactionFilter
 
-    
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return super().get_queryset()
+        queryset = self.queryset
+        filtered_queryset = queryset.filter(user=self.request.user)
+        return filtered_queryset
 
     def create(self, request, *args, **kwargs):
 
@@ -74,7 +84,7 @@ class CreateListTransactionView(generics.ListCreateAPIView):
 
         serializer = self.get_serializer
         file_data = read_cnab(path)
-
+ 
         response_list = transaction_transcription(
             file_data, serializer, self.request.user
         )
@@ -103,3 +113,13 @@ class CreateListTypeView(generics.ListCreateAPIView):
     queryset = Type.objects.all()
 
     serializer_class = TypeSerializer
+
+
+class ListTransactionsAdmin(generics.ListAPIView):
+    """List Transaction view for admin"""
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAdminUser]
+
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionDetailSerializer
