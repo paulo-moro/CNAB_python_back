@@ -18,13 +18,14 @@ class TransactionDetailSerializer(serializers.ModelSerializer):
     """Transaction Detail serializer"""
 
     user = UserSerializer(read_only=True)
+    type = TypeSerializer()
 
     class Meta:
         """Meta Class of Transaction Detail Serializer"""
 
         model = models.Transaction
         fields = "__all__"
-        depth = 1
+        # depth = 1
 
 
 class TransactionSerializer(serializers.ModelSerializer):

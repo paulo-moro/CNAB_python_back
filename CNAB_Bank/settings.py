@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django_filters",
     "transactions",
     "User",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -139,9 +140,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "uploads/")
 
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 CORS_ALLOW_METHODS = [
@@ -163,3 +165,11 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     "x-requested-with",
 ]
+
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "CNAB_BANK",
+    "DESCRIPTION": "CNAB transcription api, you can upload, transcript and manipulate transactions data.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}

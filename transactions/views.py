@@ -44,6 +44,7 @@ class RetrieveDeleteCNABFile(generics.RetrieveDestroyAPIView):
 
     queryset = CNABFile.objects.all()
     lookup_url_kwarg = "cnab_id"
+    serializer_class = CNABFIleSerializer
 
 
 class TransactionFilter(filters.FilterSet):
@@ -84,7 +85,7 @@ class CreateListTransactionView(SerializerByMethodMixin, generics.ListCreateAPIV
 
         serializer = self.get_serializer
         file_data = read_cnab(path)
- 
+
         response_list = transaction_transcription(
             file_data, serializer, self.request.user
         )
