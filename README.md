@@ -8,7 +8,7 @@ docker-compose up --build ou python manage.py runserver
 
 ## Docker :
 
-Na primeira vez que realizar o docker-compose up, em outra janela do temrinal executar:
+Na primeira vez que realizar o docker-compose up, em outra janela do terminal executar:
 
 ```
 docker exec cnab_python_back_web_1 python manage.py loaddata type.json
