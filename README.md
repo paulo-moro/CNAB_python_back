@@ -53,11 +53,18 @@ Instalação das bibliotecas:
 pip install requirements.txt
 ```
 
+Adição de 'types' pré cadastrados para o banco de dados:
+
+```
+ python manage.py loaddata type.json
+```
+
+Inicialização da aplicação:
+
 ```
 python manage.py runserver
 
 ```
-
 
 libs utilizadas:
 
