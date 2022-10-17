@@ -2,11 +2,20 @@
 
 Aplicação criada para gerenciamento de usuarios e lista de contatos. Após clonar o repositório executar os seguintes comandos:
 
-```
-docker-compose up --build ou python manage.py runserver
-```
+## .env
+Preencher .env para execução da aplicação.
+
+## Local ou Docker
+
+A aplicação pode ser inicializada via docker, ou local.
+
+
 
 ## Docker :
+
+```
+docker-compose up --build
+```
 
 Na primeira vez que realizar o docker-compose up, em outra janela do terminal executar:
 
@@ -43,6 +52,12 @@ Instalação das bibliotecas:
 ```
 pip install requirements.txt
 ```
+
+```
+python manage.py runserver
+
+```
+
 
 libs utilizadas:
 
