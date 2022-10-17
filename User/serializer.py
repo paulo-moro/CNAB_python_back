@@ -12,6 +12,12 @@ class UserDetailSerializer(serializers.ModelSerializer):
         model = User
         fields = "__all__"
         depth = 1
+        extra_kwargs = {"password": {"write_only": True}}
+
+    def create(self, validated_data: dict) -> User:
+        user = User.objects.create_user(**validated_data)
+
+        return user
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,19 +27,12 @@ class UserSerializer(serializers.ModelSerializer):
         """Meta Class of User  Serializer"""
 
         model = User
-        fields = [
-            "id",
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-            "is_superuser",
-            "is_active",
-            "date_joined",
-        ]
+        exclude = ["is_active", "is_staff", "groups", "user_permissions"]
+        read_only_fields = ["id", "date_joined", "is_superuser", "last_login"]
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data: dict) -> User:
+    
         user = User.objects.create_user(**validated_data)
 
         return user

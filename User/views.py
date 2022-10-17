@@ -17,7 +17,7 @@ from User.serializer import UserDetailSerializer, UserSerializer
 class RegisterUserView(generics.CreateAPIView):
     """Create User Api View"""
 
-    serializer_class = UserDetailSerializer
+    serializer_class = UserSerializer
 
 
 class ListUserView(generics.ListAPIView):
@@ -29,7 +29,7 @@ class ListUserView(generics.ListAPIView):
     serializer_class = UserSerializer
 
 
-class RetrieveUpdateDestroyUserProfile(generics.RetrieveUpdateDestroyAPIView):
+class UpdateDestroyUserProfile(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve Update and destroy view"""
 
     authentication_classes = [TokenAuthentication]
@@ -37,3 +37,15 @@ class RetrieveUpdateDestroyUserProfile(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_url_kwarg = "user_id"
+
+
+class RetriveProfile(generics.RetrieveAPIView):
+    """View for user Retrieve Data"""
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly | IsAdminOrOwner]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user

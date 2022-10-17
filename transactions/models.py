@@ -9,13 +9,20 @@ import os
 from django.core.exceptions import ValidationError
 
 
+def validateCpf(value):
+
+    import re
+    if not re.search("[0-9]{11}", value):
+        raise ValidationError(f"Failed to register transaction with invalid {value}")
+
+
 class Transaction(models.Model):
     """Models for Transaction"""
 
     transaction_date = models.DateField()
     transaction_time = models.TimeField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    CPF = models.IntegerField()
+    CPF = models.CharField(max_length=11, validators=[validateCpf])
     card = models.CharField(max_length=12)
     shop_rep = models.CharField(max_length=14)
     shop_name = models.CharField(max_length=19)
@@ -32,7 +39,7 @@ class Transaction(models.Model):
 class NatureChoices(models.TextChoices):
     """Nature type Choices"""
 
-    OUTCOME = "Saída"
+    OUTCOME = "Saida"
     INCOME = "Entrada"
 
 
