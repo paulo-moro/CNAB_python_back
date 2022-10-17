@@ -6,15 +6,34 @@ Aplicação criada para gerenciamento de usuarios e lista de contatos. Após clo
 docker-compose up --build ou python manage.py runserver
 ```
 
-em sequencia executar as migrações dentro do docker:
+## Docker :
+
+Na primeira vez que realizar o docker-compose up, em outra janela do temrinal executar:
 
 ```
-docker exec api python manage.py migrate
+docker exec cnab_python_back_web_1 python manage.py
+loaddata type.json
 ```
 
-caso seja executado local
+Migrações já foram executadas durante o build do docker, esse comando acima é para já carregar todos os 'types' pré cadastrados, existem views para criação de novos types de transação mas a principio 9 já são pre cadastrados.
 
-# Windows
+## Local
+
+### Windows
+
+Se for executar o runserver localmente, na primeira vez é necessário executar antes :
+
+no CNAB_bank/setting.py, modificar o Host para o local:
+
+```
+ DATABASE = {
+    ...
+    "HOST": "127.0.0.1",
+    ...
+ }
+```
+
+no terminal :
 
 ```
 python manage.py migrate
@@ -35,6 +54,8 @@ libs utilizadas:
 * black
 * ipython
 * ipdb
+* django-cors-headers
+* django-filter
 ```
 
 após iniciar a aplicação para acessar a documentação da api basta acessar o endpoint:

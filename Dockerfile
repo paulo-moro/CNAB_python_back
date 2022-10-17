@@ -9,9 +9,8 @@ COPY ./requirements.txt .
 
 RUN pip install -U pip
 RUN pip install -r requirements.txt
-
 WORKDIR /code
 
 COPY . /code/
 
-RUN python manage.py loaddata type.json 
+
