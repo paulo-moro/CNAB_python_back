@@ -1,0 +1,912 @@
+openapi: 3.0.3
+info:
+  title: CNAB_BANK
+  version: 1.0.0
+  description: CNAB transcription api, you can upload, transcript and manipulate transactions
+    data.
+paths:
+  /api/transaction/{transaction_id}/:
+    get:
+      operationId: api_transaction_retrieve
+      description: Retruve Update Delete transaction view
+      parameters:
+      - in: path
+        name: transaction_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this transaction.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDetail'
+          description: ''
+    put:
+      operationId: api_transaction_update
+      description: Retruve Update Delete transaction view
+      parameters:
+      - in: path
+        name: transaction_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this transaction.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TransactionDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TransactionDetail'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDetail'
+          description: ''
+    patch:
+      operationId: api_transaction_partial_update
+      description: Retruve Update Delete transaction view
+      parameters:
+      - in: path
+        name: transaction_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this transaction.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTransactionDetail'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDetail'
+          description: ''
+    delete:
+      operationId: api_transaction_destroy
+      description: Retruve Update Delete transaction view
+      parameters:
+      - in: path
+        name: transaction_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this transaction.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/transaction/file/{cnab_id}/:
+    get:
+      operationId: api_transaction_file_list
+      description: Create List Transaction view
+      parameters:
+      - in: query
+        name: CPF
+        schema:
+          type: integer
+      - in: query
+        name: amount
+        schema:
+          type: number
+      - in: query
+        name: card
+        schema:
+          type: string
+      - in: path
+        name: cnab_id
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: shop_name
+        schema:
+          type: string
+      - in: query
+        name: shop_rep
+        schema:
+          type: string
+      - in: query
+        name: transaction_date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: transaction_time
+        schema:
+          type: string
+          format: time
+      - in: query
+        name: type
+        schema:
+          type: integer
+      - in: query
+        name: user
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionDetail'
+          description: ''
+    post:
+      operationId: api_transaction_file_create
+      description: Create List Transaction view
+      parameters:
+      - in: path
+        name: cnab_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+  /api/transactions/:
+    get:
+      operationId: api_transactions_list
+      description: Create List Transaction view
+      parameters:
+      - in: query
+        name: CPF
+        schema:
+          type: integer
+      - in: query
+        name: amount
+        schema:
+          type: number
+      - in: query
+        name: card
+        schema:
+          type: string
+      - in: query
+        name: shop_name
+        schema:
+          type: string
+      - in: query
+        name: shop_rep
+        schema:
+          type: string
+      - in: query
+        name: transaction_date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: transaction_time
+        schema:
+          type: string
+          format: time
+      - in: query
+        name: type
+        schema:
+          type: integer
+      - in: query
+        name: user
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionDetail'
+          description: ''
+    post:
+      operationId: api_transactions_create
+      description: Create List Transaction view
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+  /api/transactions/file/{cnab_id}/:
+    get:
+      operationId: api_transactions_file_retrieve
+      description: View for deletion of uploaded file
+      parameters:
+      - in: path
+        name: cnab_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cnab file.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CNABFIle'
+          description: ''
+    delete:
+      operationId: api_transactions_file_destroy
+      description: View for deletion of uploaded file
+      parameters:
+      - in: path
+        name: cnab_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this cnab file.
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/transactions/files/:
+    get:
+      operationId: api_transactions_files_list
+      description: List uploaded CNAB Files
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CNABFIle'
+          description: ''
+  /api/transactions/type/:
+    get:
+      operationId: api_transactions_type_list
+      description: Create and list type view
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Type'
+          description: ''
+    post:
+      operationId: api_transactions_type_create
+      description: Create and list type view
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Type'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Type'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Type'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Type'
+          description: ''
+  /api/transactions/upload/:
+    post:
+      operationId: api_transactions_upload_create
+      description: Create Transaction from a CNABFile
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CNABFIle'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CNABFIle'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CNABFIle'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CNABFIle'
+          description: ''
+  /api/users/:
+    get:
+      operationId: api_users_list
+      description: List users View
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/{user_id}/:
+    get:
+      operationId: api_users_retrieve
+      description: Retrieve Update and destroy view
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: api_users_update
+      description: Retrieve Update and destroy view
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: api_users_partial_update
+      description: Retrieve Update and destroy view
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: api_users_destroy
+      description: Retrieve Update and destroy view
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/login/:
+    post:
+      operationId: api_users_login_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /api/users/profile:
+    get:
+      operationId: api_users_profile_retrieve
+      description: View for user Retrieve Data
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/register/:
+    post:
+      operationId: api_users_register_create
+      description: Create User Api View
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    CNABFIle:
+      type: object
+      description: CNABFile  serializer
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 50
+        file:
+          type: string
+          format: uri
+      required:
+      - file
+      - id
+      - title
+    NatureEnum:
+      enum:
+      - Saída
+      - Entrada
+      type: string
+    PatchedTransactionDetail:
+      type: object
+      description: Transaction Detail serializer
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/Type'
+        transaction_date:
+          type: string
+          format: date
+        transaction_time:
+          type: string
+          format: time
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        CPF:
+          type: integer
+        card:
+          type: string
+          maxLength: 12
+        shop_rep:
+          type: string
+          maxLength: 14
+        shop_name:
+          type: string
+          maxLength: 19
+    PatchedUser:
+      type: object
+      description: User  serializer
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 12
+        last_name:
+          type: string
+          maxLength: 30
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 254
+    SignalEnum:
+      enum:
+      - +
+      - '-'
+      type: string
+    Transaction:
+      type: object
+      description: Transaction Serializer
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        transaction_date:
+          type: string
+          format: date
+        transaction_time:
+          type: string
+          format: time
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        CPF:
+          type: integer
+        card:
+          type: string
+          maxLength: 12
+        shop_rep:
+          type: string
+          maxLength: 14
+        shop_name:
+          type: string
+          maxLength: 19
+        type:
+          type: integer
+        user:
+          type: string
+          format: uuid
+      required:
+      - CPF
+      - amount
+      - card
+      - id
+      - shop_name
+      - shop_rep
+      - transaction_date
+      - transaction_time
+      - type
+      - user
+    TransactionDetail:
+      type: object
+      description: Transaction Detail serializer
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/Type'
+        transaction_date:
+          type: string
+          format: date
+        transaction_time:
+          type: string
+          format: time
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        CPF:
+          type: integer
+        card:
+          type: string
+          maxLength: 12
+        shop_rep:
+          type: string
+          maxLength: 14
+        shop_name:
+          type: string
+          maxLength: 19
+      required:
+      - CPF
+      - amount
+      - card
+      - id
+      - shop_name
+      - shop_rep
+      - transaction_date
+      - transaction_time
+      - type
+      - user
+    Type:
+      type: object
+      description: Type serializer
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        description:
+          type: string
+          maxLength: 30
+        nature:
+          $ref: '#/components/schemas/NatureEnum'
+        signal:
+          $ref: '#/components/schemas/SignalEnum'
+      required:
+      - description
+      - id
+      - nature
+      - signal
+    User:
+      type: object
+      description: User  serializer
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        is_superuser:
+          type: boolean
+          readOnly: true
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 12
+        last_name:
+          type: string
+          maxLength: 30
+        username:
+          type: string
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 254
+      required:
+      - date_joined
+      - email
+      - first_name
+      - id
+      - is_superuser
+      - last_login
+      - last_name
+      - password
+      - username
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
